@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Online Examination System</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f1f5f9;
+    color:#1e293b;
+}
+
+.page{
+    display:none;
+    min-height:100vh;
+}
+
+.page.active{
+    display:block;
+}
+
+.navbar,
+.dashboard-nav{
+    background:#172554;
+    color:white;
+    padding:18px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.nav-buttons{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    padding:11px 18px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.nav-buttons button{
+    background:transparent;
+    color:white;
+}
+
+.nav-buttons button:hover{
+    background:#2563eb;
+}
+
+.primary{
+    background:#2563eb;
+    color:white;
+}
+
+.green{
+    background:#16a34a;
+    color:white;
+}
+
+.red{
+    background:#dc2626;
+    color:white;
+}
+
+.gray{
+    background:#64748b;
+    color:white;
+}
+
+.hero{
+    min-height:calc(100vh - 70px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(135deg,#dbeafe,#f8fafc);
+}
+
+.hero-content{
+    max-width:800px;
+    padding:30px;
+}
+
+.hero h1{
+    font-size:45px;
+    color:#172554;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:18px;
+    line-height:1.7;
+    color:#475569;
+    margin-bottom:30px;
+}
+
+.home-buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.auth-container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#dbeafe;
+}
+
+.auth-box{
+    width:420px;
+    max-width:92%;
+    background:white;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    text-align:center;
+}
+
+.auth-box h2{
+    color:#172554;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    color:#64748b;
+    margin-bottom:25px;
+}
+
+form{
+    display:flex;
+    flex-direction:column;
+    gap:13px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:7px;
+    font-size:15px;
+}
+
+textarea{
+    resize:vertical;
+    min-height:80px;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    outline:2px solid #2563eb;
+}
+
+.link{
+    color:#2563eb;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.note{
+    margin-top:15px;
+    color:#dc2626;
+    font-size:13px;
+}
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+    padding:35px 0;
+}
+
+.welcome{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.welcome h1{
+    color:#172554;
+    margin-bottom:10px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:22px;
+}
+
+.card{
+    background:white;
+    padding:28px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.07);
+}
+
+.card h2,
+.card h3{
+    color:#172554;
+    margin-bottom:12px;
+}
+
+.card p{
+    color:#64748b;
+    margin-bottom:15px;
+}
+
+.exam-item,
+.faculty-item,
+.result-item{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    padding:18px;
+    border-radius:9px;
+    margin-bottom:12px;
+}
+
+.exam-item h3,
+.result-item h3{
+    color:#172554;
+    margin-bottom:8px;
+}
+
+.exam-item p,
+.result-item p{
+    margin:5px 0;
+}
+
+.question-box{
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+    padding:18px;
+    border-radius:8px;
+    margin-bottom:12px;
+}
+
+.question-box h4{
+    color:#172554;
+    margin-bottom:12px;
+}
+
+.option{
+    display:block;
+    padding:8px;
+    margin:5px 0;
+    cursor:pointer;
+}
+
+.option input{
+    width:auto;
+    margin-right:8px;
+}
+
+.timer{
+    background:#dc2626;
+    color:white;
+    padding:10px 18px;
+    border-radius:8px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.exam-question{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    margin-bottom:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.exam-question h3{
+    color:#172554;
+    margin-bottom:15px;
+}
+
+.exam-option{
+    display:block;
+    padding:12px;
+    border:1px solid #e2e8f0;
+    border-radius:7px;
+    margin:8px 0;
+    cursor:pointer;
+}
+
+.exam-option:hover{
+    background:#eff6ff;
+}
+
+.exam-option input{
+    width:auto;
+    margin-right:10px;
+}
+
+.result-box{
+    max-width:600px;
+    margin:50px auto;
+    background:white;
+    padding:40px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.score{
+    background:#eff6ff;
+    padding:20px;
+    border-radius:10px;
+    margin:20px 0;
+}
+
+@media(max-width:700px){
+    .navbar,
+    .dashboard-nav{
+        flex-direction:column;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+HOME
+===================================================== -->
+
+<div id="homePage" class="page active">
+
+<nav class="navbar">
+
+<div class="logo">
+Online Examination System
+</div>
+
+<div class="nav-buttons">
+
+<button onclick="showPage('homePage')">
+Home
+</button>
+
+<button onclick="showPage('studentLoginPage')">
+Student
+</button>
+
+<button onclick="showPage('principalLoginPage')">
+Principal
+</button>
+
+<button onclick="showPage('facultyLoginPage')">
+Faculty
+</button>
+
+</div>
+
+</nav>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<h1>Online Examination System</h1>
+
+<p>
+Students can register and attend examinations.
+The Principal manages faculty accounts.
+Faculty members create and manage examinations
+and view student results.
+</p>
+
+<div class="home-buttons">
+
+<button
+class="primary"
+onclick="showPage('studentRegisterPage')">
+Student Register
+</button>
+
+<button
+class="green"
+onclick="showPage('studentLoginPage')">
+Student Login
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<!-- =====================================================
+STUDENT REGISTER
+===================================================== -->
+
+<div id="studentRegisterPage" class="page">
+
+<div class="auth-container">
+
+<div class="auth-box">
+
+<h2>Student Registration</h2>
+
+<p class="subtitle">
+Create your account
+</p>
+
+<form id="studentRegisterForm">
+
+<input
+id="studentName"
+type="text"
+placeholder="Full Name"
+required>
+
+<input
+id="studentId"
+type="text"
+placeholder="Student ID"
+required>
+
+<input
+id="studentEmail"
+type="email"
+placeholder="Email"
+required>
+
+<input
+id="studentPassword"
+type="password"
+placeholder="Password"
+required>
+
+<input
+id="studentConfirmPassword"
+type="password"
+placeholder="Confirm Password"
+required>
+
+<button
+class="primary"
+type="submit">
+Register
+</button>
+
+</form>
+
+<p>
+Already registered?
+<span
+class="link"
+onclick="showPage('studentLoginPage')">
+Login
+</span>
+</p>
+
+<br>
+
+<button
+class="gray"
+onclick="showPage('homePage')">
+Back
+</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- =====================================================
+STUDENT LOGIN
+===================================================== -->
+
+<div id="studentLoginPage" class="page">
+
+<div class="auth-container">
+
+<div class="auth-box">
+
+<h2>Student Login</h2>
+
+<p class="subtitle">
+Login to attend examinations
+</p>
+
+<form id="studentLoginForm">
+
+<input
+id="loginStudentId"
+type="text"
+placeholder="Student ID"
+required>
+
+<input
+id="loginStudentPassword"
+type="password"
+placeholder="Password"
+required>
+
+<button
+class="primary"
+type="submit">
+Login
+</button>
+
+</form>
+
+<p>
+New student?
+
+<span
+class="link"
+onclick="showPage('studentRegisterPage')">
+Register
+</span>
+</p>
+
+<br>
+
+<button
+class="gray"
+onclick="showPage('homePage')">
+Back
+</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- =====================================================
+STUDENT DASHBOARD
+===================================================== -->
+
+<div id="studentDashboard" class="page">
+
+<nav class="dashboard-nav">
+
+<h2>Student Dashboard</h2>
+
+<button
+class="red"
+onclick="logout()">
+Logout
+</button>
+
+</nav>
+
+<div class="container">
+
+<div class="welcome">
+
+<h1>
+Welcome,
+<span id="studentWelcome"></span>
+</h1>
+
+<p>
+Choose an examination created by faculty.
+</p>
+
+</div>
+
+<div class="card">
+
+<h2>Available Examinations</h2>
+
+<div id="studentExamList"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+PRINCIPAL LOGIN
+===================================================== -->
+
+<div id="principalLoginPage" class="page">
+
+<div class="auth-container">
+
+<div class="auth-box">
+
+<h2>Principal Login</h2>
+
+<p class="subtitle">
+Principal Administration
+</p>
+
+<form id="principalLoginForm">
+
+<input
+id="principalUsername"
+type="text"
+placeholder="Username"
+required>
+
+<input
+id="principalPassword"
+type="password"
+placeholder="Password"
+required>
+
+<button
+class="primary"
+type="submit">
+Login
+</button>
+
+</form>
+
+<p class="note">
+Only the Principal can create faculty accounts.
+</p>
+
+<br>
+
+<button
+class="gray"
+onclick="showPage('homePage')">
+Back
+</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- =====================================================
+PRINCIPAL DASHBOARD
+===================================================== -->
+
+<div id="principalDashboard" class="page">
+
+<nav class="dashboard-nav">
+
+<h2>Principal Dashboard</h2>
+
+<button
+class="red"
+onclick="logout()">
+Logout
+</button>
+
+</nav>
+
+<div class="container">
+
+<div class="welcome">
+
+<h1>Welcome, Gowthami</h1>
+
+<p>
+You can create and manage faculty accounts.
+</p>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Add Faculty</h2>
+
+<form id="facultyForm">
+
+<input
+id="facultyName"
+placeholder="Faculty Name"
+required>
+
+<input
+id="facultyId"
+placeholder="Faculty ID"
+required>
+
+<input
+id="facultyEmail"
+type="email"
+placeholder="Faculty Email"
+required>
+
+<input
+id="facultyPassword"
+type="password"
+placeholder="Faculty Password"
+required>
+
+<button
+class="green"
+type="submit">
+Create Faculty
+</button>
+
+</form>
+
+</div>
+
+<div class="card">
+
+<h2>Faculty Accounts</h2>
+
+<div id="facultyList"></div>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- =====================================================
+FACULTY LOGIN
+===================================================== -->
+
+<div id="facultyLoginPage" class="page">
+
+<div class="auth-container">
+
+<div class="auth-box">
+
+<h2>Faculty Login</h2>
+
+<p class="subtitle">
+Only faculty created by Principal can login.
+</p>
+
+<form id="facultyLoginForm">
+
+<input
+id="loginFacultyId"
+placeholder="Faculty ID"
+required>
+
+<input
+id="loginFacultyPassword"
+type="password"
+placeholder="Password"
+required>
+
+<button
+class="primary"
+type="submit">
+Login
+</button>
+
+</form>
+
+<p class="note">
+Faculty cannot register themselves.
+</p>
+
+<br>
+
+<button
+class="gray"
+onclick="showPage('homePage')">
+Back
+</button>
+
+</div>
+</div>
+</div>
+
+
+<!-- =====================================================
+FACULTY DASHBOARD
+===================================================== -->
+
+<div id="facultyDashboard" class="page">
+
+<nav class="dashboard-nav">
+
+<h2>Faculty Dashboard</h2>
+
+<button
+class="red"
+onclick="logout()">
+Logout
+</button>
+
+</nav>
+
+<div class="container">
+
+<div class="welcome">
+
+<h1>
+Welcome,
+<span id="facultyWelcome"></span>
+</h1>
+
+<p>
+Create examinations, add questions and view student results.
+</p>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h2>Create Examination</h2>
+
+<p>
+Create an examination with your own subject,
+duration and questions.
+</p>
+
+<button
+class="primary"
+onclick="showPage('createExamPage')">
+Create Exam
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Manage Examinations</h2>
+
+<p>
+View examinations created by you.
+</p>
+
+<button
+class="green"
+onclick="loadFacultyExams()">
+View My Exams
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Student Results</h2>
+
+<p>
+View results of students who completed examinations.
+</p>
+
+<button
+class="primary"
+onclick="showFacultyResults()">
+View Results
+</button>
+
+</div>
+
+</div>
+
+<div
+id="facultyExamDisplay"
+style="margin-top:25px">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+CREATE EXAM
+===================================================== -->
+
+<div id="createExamPage" class="page">
+
+<nav class="dashboard-nav">
+
+<h2>Create Examination</h2>
+
+<button
+onclick="showPage('facultyDashboard')">
+Back
+</button>
+
+</nav>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Examination Details</h2>
+
+<form id="createExamForm">
+
+<input
+id="examName"
+placeholder="Examination Name"
+required>
+
+<input
+id="examSubject"
+placeholder="Subject Name"
+required>
+
+<input
+id="examDuration"
+type="number"
+min="1"
+placeholder="Duration in Minutes"
+required>
+
+<input
+id="examQuestionCount"
+type="number"
+min="1"
+placeholder="Number of Questions"
+required>
+
+<button
+class="primary"
+type="submit">
+Continue to Add Questions
+</button>
+
+</form>
+
+</div>
+
+<div
+id="questionCreator"
+style="margin-top:25px">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+TAKE EXAM
+===================================================== -->
+
+<div id="takeExamPage" class="page">
+
+<nav class="dashboard-nav">
+
+<h2 id="takeExamTitle">
+Examination
+</h2>
+
+<div class="timer">
+
+Time:
+<span id="examTimer">
+00:00
+</span>
+
+</div>
+
+</nav>
+
+<div class="container">
+
+<div
+id="takeQuestions">
+</div>
+
+<button
+class="green"
+style="width:100%;padding:15px;font-size:17px"
+onclick="submitExam()">
+
+Submit Examination
+
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+RESULT PAGE
+===================================================== -->
+
+<div id="resultPage" class="page">
+
+<div class="result-box">
+
+<h1>Examination Result</h1>
+
+<h2 id="resultExamName"></h2>
+
+<div class="score">
+
+<h2>
+Marks:
+<span id="resultMarks"></span>
+</h2>
+
+<h2>
+Percentage:
+<span id="resultPercentage"></span>%
+</h2>
+
+<h2>
+Grade:
+<span id="resultGrade"></span>
+</h2>
+
+</div>
+
+<p>
+Correct Answers:
+<strong id="resultCorrect"></strong>
+</p>
+
+<p>
+Wrong Answers:
+<strong id="resultWrong"></strong>
+</p>
+
+<br>
+
+<button
+class="primary"
+onclick="showPage('studentDashboard')">
+Student Dashboard
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+GLOBAL VARIABLES
+===================================================== */
+
+const PRINCIPAL_USERNAME = "Gowthami";
+const PRINCIPAL_PASSWORD = "Gowthami27";
+
+let currentExam = null;
+let timerInterval = null;
+let remainingSeconds = 0;
+
+
+/* =====================================================
+PAGE NAVIGATION
+===================================================== */
+
+function showPage(pageId){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+        page.classList.remove("active");
+    });
+
+    document
+    .getElementById(pageId)
+    .classList.add("active");
+
+}
+
+
+/* =====================================================
+STUDENT REGISTRATION
+===================================================== */
+
+document
+.getElementById("studentRegisterForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const student={
+
+        name:
+        document.getElementById("studentName").value.trim(),
+
+        id:
+        document.getElementById("studentId").value.trim(),
+
+        email:
+        document.getElementById("studentEmail").value.trim(),
+
+        password:
+        document.getElementById("studentPassword").value
+
+    };
+
+    const confirm=
+    document.getElementById("studentConfirmPassword").value;
+
+    if(student.password!==confirm){
+
+        alert("Passwords do not match!");
+        return;
+
+    }
+
+    let students=
+    JSON.parse(localStorage.getItem("students"))||[];
+
+    if(
+        students.some(s=>s.id===student.id)
+    ){
+
+        alert("Student ID already exists!");
+        return;
+
+    }
+
+    students.push(student);
+
+    localStorage.setItem(
+        "students",
+        JSON.stringify(students)
+    );
+
+    alert("Student registered successfully!");
+
+    this.reset();
+
+    showPage("studentLoginPage");
+
+});
+
+
+/* =====================================================
+STUDENT LOGIN
+===================================================== */
+
+document
+.getElementById("studentLoginForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const id=
+    document.getElementById("loginStudentId").value;
+
+    const password=
+    document.getElementById("loginStudentPassword").value;
+
+    const students=
+    JSON.parse(localStorage.getItem("students"))||[];
+
+    const student=
+    students.find(
+        s=>s.id===id && s.password===password
+    );
+
+    if(!student){
+
+        alert("Invalid Student ID or Password!");
+        return;
+
+    }
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+            role:"student",
+            data:student
+        })
+    );
+
+    document.getElementById(
+        "studentWelcome"
+    ).textContent=student.name;
+
+    loadStudentExams();
+
+    showPage("studentDashboard");
+
+});
+
+
+/* =====================================================
+PRINCIPAL LOGIN
+===================================================== */
+
+document
+.getElementById("principalLoginForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const username=
+    document.getElementById(
+        "principalUsername"
+    ).value;
+
+    const password=
+    document.getElementById(
+        "principalPassword"
+    ).value;
+
+    if(
+        username===PRINCIPAL_USERNAME &&
+        password===PRINCIPAL_PASSWORD
+    ){
+
+        localStorage.setItem(
+            "currentUser",
+            JSON.stringify({
+                role:"principal"
+            })
+        );
+
+        loadFacultyList();
+
+        showPage("principalDashboard");
+
+    }else{
+
+        alert("Invalid Principal credentials!");
+
+    }
+
+});
+
+
+/* =====================================================
+ADD FACULTY
+===================================================== */
+
+document
+.getElementById("facultyForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const user=
+    JSON.parse(
+        localStorage.getItem("currentUser")
+    );
+
+    if(
+        !user ||
+        user.role!=="principal"
+    ){
+
+        alert("Only Principal can add faculty!");
+        return;
+
+    }
+
+    const faculty={
+
+        name:
+        document.getElementById("facultyName").value,
+
+        id:
+        document.getElementById("facultyId").value,
+
+        email:
+        document.getElementById("facultyEmail").value,
+
+        password:
+        document.getElementById("facultyPassword").value
+
+    };
+
+    let facultyList=
+    JSON.parse(
+        localStorage.getItem("faculty")
+    )||[];
+
+    if(
+        facultyList.some(
+            f=>f.id===faculty.id
+        )
+    ){
+
+        alert("Faculty ID already exists!");
+        return;
+
+    }
+
+    facultyList.push(faculty);
+
+    localStorage.setItem(
+        "faculty",
+        JSON.stringify(facultyList)
+    );
+
+    alert("Faculty account created!");
+
+    this.reset();
+
+    loadFacultyList();
+
+});
+
+
+/* =====================================================
+FACULTY LIST
+===================================================== */
+
+function loadFacultyList(){
+
+    const container=
+    document.getElementById("facultyList");
+
+    const faculty=
+    JSON.parse(
+        localStorage.getItem("faculty")
+    )||[];
+
+    container.innerHTML="";
+
+    if(faculty.length===0){
+
+        container.innerHTML=
+        "<p>No faculty accounts created.</p>";
+
+        return;
+
+    }
+
+    faculty.forEach((f,index)=>{
+
+        container.innerHTML+=`
+
+        <div class="faculty-item">
+
+        <strong>${f.name}</strong>
+
+        <p>Faculty ID: ${f.id}</p>
+
+        <p>Email: ${f.email}</p>
+
+        <button
+        class="red"
+        onclick="deleteFaculty(${index})">
+
+        Delete
+
+        </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+DELETE FACULTY
+===================================================== */
+
+function deleteFaculty(index){
+
+    let faculty=
+    JSON.parse(
+        localStorage.getItem("faculty")
+    )||[];
+
+    if(confirm("Delete this faculty account?")){
+
+        faculty.splice(index,1);
+
+        localStorage.setItem(
+            "faculty",
+            JSON.stringify(faculty)
+        );
+
+        loadFacultyList();
+
+    }
+
+}
+
+
+/* =====================================================
+FACULTY LOGIN
+===================================================== */
+
+document
+.getElementById("facultyLoginForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const id=
+    document.getElementById(
+        "loginFacultyId"
+    ).value;
+
+    const password=
+    document.getElementById(
+        "loginFacultyPassword"
+    ).value;
+
+    const faculty=
+    JSON.parse(
+        localStorage.getItem("faculty")
+    )||[];
+
+    const member=
+    faculty.find(
+        f=>f.id===id &&
+        f.password===password
+    );
+
+    if(!member){
+
+        alert(
+            "Access denied!\n" +
+            "Faculty must be created by Principal."
+        );
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "currentUser",
+        JSON.stringify({
+            role:"faculty",
+            data:member
+        })
+    );
+
+    document.getElementById(
+        "facultyWelcome"
+    ).textContent=member.name;
+
+    showPage("facultyDashboard");
+
+});
+
+
+/* =====================================================
+FACULTY CREATE EXAM
+===================================================== */
+
+document
+.getElementById("createExamForm")
+.addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const user=
+    JSON.parse(
+        localStorage.getItem("currentUser")
+    );
+
+    if(
+        !user ||
+        user.role!=="faculty"
+    ){
+
+        alert("Only faculty can create exams!");
+        return;
+
+    }
+
+    const name=
+    document.getElementById("examName").value;
+
+    const subject=
+    document.getElementById("examSubject").value;
+
+    const duration=
+    parseInt(
+        document.getElementById("examDuration").value
+    );
+
+    const count=
+    parseInt(
+        document.getElementById(
+            "examQuestionCount"
+        ).value
+    );
+
+    if(count<1){
+
+        alert("Enter valid question count!");
+        return;
+
+    }
+
+    let html=`
+
+    <div class="card">
+
+    <h2>Add Questions</h2>
+
+    <p>
+    Exam: <strong>${name}</strong>
+    </p>
+
+    <p>
+    Subject: <strong>${subject}</strong>
+    </p>
+
+    <p>
+    Duration: <strong>${duration} minutes</strong>
+    </p>
+
+    <br>
+
+    `;
+
+    for(let i=1;i<=count;i++){
+
+        html+=`
+
+        <div class="question-box">
+
+        <h4>
+        Question ${i}
+        </h4>
+
+        <textarea
+        id="question_${i}"
+        placeholder="Enter question"
+        required></textarea>
+
+        <input
+        id="optionA_${i}"
+        placeholder="Option A"
+        required>
+
+        <input
+        id="optionB_${i}"
+        placeholder="Option B"
+        required>
+
+        <input
+        id="optionC_${i}"
+        placeholder="Option C"
+        required>
+
+        <input
+        id="optionD_${i}"
+        placeholder="Option D"
+        required>
+
+        <select
+        id="answer_${i}">
+
+        <option value="0">
+        Correct Answer: Option A
+        </option>
+
+        <option value="1">
+        Correct Answer: Option B
+        </option>
+
+        <option value="2">
+        Correct Answer: Option C
+        </option>
+
+        <option value="3">
+        Correct Answer: Option D
+        </option>
+
+        </select>
+
+        </div>
+
+        `;
+
+    }
+
+    html+=`
+
+    <button
+    class="green"
+    onclick="saveExam(${count})">
+
+    Publish Examination
+
+    </button>
+
+    </div>
+
+    `;
+
+    document.getElementById(
+        "questionCreator"
+    ).innerHTML=html;
+
+});
+
+
+/* =====================================================
+SAVE EXAM
+===================================================== */
+
+function saveExam(questionCount){
+
+    const user=
+    JSON.parse(
+        localStorage.getItem("currentUser")
+    );
+
+    const exam={
+
+        id:
+        Date.now(),
+
+        name:
+        document.getElementById("examName").value,
+
+        subject:
+        document.getElementById("examSubject").value,
+
+        duration:
+        parseInt(
+            document.getElementById("examDuration").value
+        ),
+
+        facultyId:
+        user.data.id,
+
+        facultyName:
+        user.data.name,
+
+        questions:[]
+
+    };
+
+
+    for(let i=1;i<=questionCount;i++){
+
+        exam.questions.push({
+
+            question:
+            document.getElementById(
+                `question_${i}`
+            ).value,
+
+            options:[
+
+                document.getElementById(
+                    `optionA_${i}`
+                ).value,
+
+                document.getElementById(
+                    `optionB_${i}`
+                ).value,
+
+                document.getElementById(
+                    `optionC_${i}`
+                ).value,
+
+                document.getElementById(
+                    `optionD_${i}`
+                ).value
+
+            ],
+
+            answer:
+            parseInt(
+                document.getElementById(
+                    `answer_${i}`
+                ).value
+            )
+
+        });
+
+    }
+
+
+    let exams=
+    JSON.parse(
+        localStorage.getItem("exams")
+    )||[];
+
+
+    exams.push(exam);
+
+
+    localStorage.setItem(
+        "exams",
+        JSON.stringify(exams)
+    );
+
+
+    alert(
+        "Examination published successfully!"
+    );
+
+
+    document.getElementById(
+        "createExamForm"
+    ).reset();
+
+    document.getElementById(
+        "questionCreator"
+    ).innerHTML="";
+
+    showPage("facultyDashboard");
+
+}
+
+
+/* =====================================================
+FACULTY VIEW EXAMS
+===================================================== */
+
+function loadFacultyExams(){
+
+    const user=
+    JSON.parse(
+        localStorage.getItem("currentUser")
+    );
+
+    const exams=
+    JSON.parse(
+        localStorage.getItem("exams")
+    )||[];
+
+
+    const myExams=
+    exams.filter(
+        e=>e.facultyId===user.data.id
+    );
+
+
+    const display=
+    document.getElementById(
+        "facultyExamDisplay"
+    );
+
+
+    display.innerHTML=`
+
+    <div class="card">
+
+    <h2>My Examinations</h2>
+
+    `;
+
+
+    if(myExams.length===0){
+
+        display.innerHTML+=
+        "<p>No examinations created yet.</p>";
+
+    }else{
+
+        myExams.forEach(exam=>{
+
+            display.innerHTML+=`
+
+            <div class="exam-item">
+
+            <h3>
+            ${exam.name}
+            </h3>
+
+            <p>
+            Subject: ${exam.subject}
+            </p>
+
+            <p>
+            Questions: ${exam.questions.length}
+            </p>
+
+            <p>
+            Duration: ${exam.duration} minutes
+            </p>
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+
+    display.innerHTML+="</div>";
+
+}
+
+
+/* =====================================================
+STUDENT EXAM LIST
+===================================================== */
+
+function loadStudentExams(){
+
+    const exams=
+    JSON.parse(
+        localStorage.getItem("exams")
+    )||[];
+
+    const container=
+    document.getElementById(
+        "studentExamList"
+    );
+
+    container.innerHTML="";
+
+
+    if(exams.length===0){
+
+        container.innerHTML=
+        "<p>No examinations are available yet.</p>";
+
+        return;
+
+    }
+
+
+    exams.forEach(exam=>{
+
+        container.innerHTML+=`
+
+        <div class="exam-item">
+
+        <h3>
+        ${exam.name}
+        </h3>
+
+        <p>
+        Subject: ${exam.subject}
+        </p>
+
+        <p>
+        Questions: ${exam.questions.length}
+        </p>
+
+        <p>
+        Duration: ${exam.duration} minutes
+        </p>
+
+        <p>
+        Created by: ${exam.facultyName}
+        </p>
+
+        <button
+        class="primary"
+        onclick="startExam(${exam.id})">
+
+        Start Examination
+
+        </button>
+
+        </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =====================================================
+START EXAM
+===================================================== */
+
+function startExam(examId){
+
+    const exams=
+    JSON.parse(
+        localStorage.getItem("exams")
+    )||[];
+
+    currentExam=
+    exams.find(
+        e=>e.id===examId
+    );
+
+
+    if(!currentExam){
+
+        alert("Examination not found!");
+        return;
+
+    }
+
+
+    document.getElementById(
+        "takeExamTitle"
+    ).textContent=
+        currentExam.name;
+
+
+    let html="";
+
+
+    currentExam.questions.forEach(
+        (q,index)=>{
+
+            html+=`
+
+            <div class="exam-question">
+
+            <h3>
+            ${index+1}.
+            ${q.question}
+            </h3>
+
+            `;
+
+
+            q.options.forEach(
+                (option,optionIndex)=>{
+
+                    html+=`
+
+                    <label class="exam-option">
+
+                    <input
+                    type="radio"
+                    name="answer_${index}"
+                    value="${optionIndex}">
+
+                    ${option}
+
+                    </label>
+
+                    `;
+
+                }
+            );
+
+
+            html+=`</div>`;
+
+        }
+    );
+
+
+    document.getElementById(
+        "takeQuestions"
+    ).innerHTML=html;
+
+
+    remainingSeconds=
+        currentExam.duration*60;
+
+
+    showPage("takeExamPage");
+
+    startTimer();
+
+}
+
+
+/* =====================================================
+TIMER
+===================================================== */
+
+function startTimer(){
+
+    clearInterval(timerInterval);
+
+    updateTimer();
+
+
+    timerInterval=
+    setInterval(()=>{
+
+        remainingSeconds--;
+
+        updateTimer();
+
+
+        if(remainingSeconds<=0){
+
+            clearInterval(timerInterval);
+
+            alert(
+                "Time is over. Examination submitted automatically."
+            );
+
+            submitExam();
+
+        }
+
+    },1000);
+
+}
+
+
+function updateTimer(){
+
+    const minutes=
+    Math.floor(
+        remainingSeconds/60
+    );
+
+    const seconds=
+    remainingSeconds%60;
+
+
+    document.getElementById(
+        "examTimer"
+    ).textContent=
+
+        String(minutes).padStart(2,"0")
+        +
+        ":"
+        +
+        String(seconds).padStart(2,"0");
+
+}
+
+
+/* =====================================================
+SUBMIT EXAM
+===================================================== */
+
+function submitExam(){
+
+    clearInterval(timerInterval);
+
+
+    const user=
+    JSON.parse(
+        localStorage.getItem("currentUser")
+    );
+
+
+    let correct=0;
+
+
+    currentExam.questions.forEach(
+        (q,index)=>{
+
+            const selected=
+            document.querySelector(
+                `input[name="answer_${index}"]:checked`
+            );
+
+
+            if(
+                selected &&
+                parseInt(selected.value)===q.answer
+            ){
+
+                correct++;
+
+            }
+
+        }
+    );
+
+
+    const total=
+    currentExam.questions.length;
+
+
+    const marks=
+    correct*2;
+
+
+    const totalMarks=
+    total*2;
+
+
+    const percentage=
+    (marks/totalMarks)*100;
+
+
+    const grade=
+    calculateGrade(percentage);
+
+
+    const result={
+
+        id:Date.now(),
+
+        examId:currentExam.id,
+
+        examName:currentExam.name,
+
+        subject:currentExam.subject,
+
+        studentId:user.data.id,
+
+        studentName:user.data.name,
+
+        facultyId:currentExam.facultyId,
+
+        facultyName:currentExam.facultyName,
+
+        correct:correct,
+
+        wrong:total-correct,
+
+        marks:marks,
+
+        totalMarks:totalMarks,
+
+        percentage:percentage,
+
+        grade:grade,
+
+        date:new Date().toLocaleString()
+
+    };
+
+
+    let results=
+    JSON.parse(
+        localStorage.getItem("results")
+    )||[];
+
+
+    results.push(result);
+
+
+    localStorage.setItem(
+        "results",
+        JSON.stringify(results)
+    );
+
+
+    document.getElementById(
+        "resultExamName"
+    ).textContent=
+        currentExam.name;
+
+
+    document.getElementById(
+        "resultMarks"
+    ).textContent=
+        marks+" / "+totalMarks;
+
+
+    document.getElementById(
+        "resultPercentage"
+    ).textContent=
+        percentage.toFixed(2);
+
+
+    document.getElementById(
+        "resultGrade"
+    ).textContent=
+        grade;
+
+
+    document.getElementById(
+        "resultCorrect"
+    ).textContent=
+        correct;
+
+
+    document.getElementById(
+        "resultWrong"
+    ).textContent=
+        total-correct;
+
+
+    showPage("resultPage");
+
+}
+
+
+/* =====================================================
+GRADING
+===================================================== */
+
+function calculateGrade(percentage){
+
+    if(percentage>=90)
+        return "A+";
+
+    if(percentage>=80)
+        return "A";
+
+    if(percentage>=70)
+        return "B";
+
+    if(percentage>=60)
+        return "C";
+
+    if(percentage>=50)
+        return "D";
+
+    return "F";
+
+}
+
+
+/* =====================================================
+FACULTY VIEW RESULTS
+===================================================== */
+
+function showFacultyResults(){
+
+    const user=
+    JSON.parse(
+        localStorage.getItem("currentUser")
+    );
+
+
+    const results=
+    JSON.parse(
+        localStorage.getItem("results")
+    )||[];
+
+
+    const myResults=
+    results.filter(
+        r=>r.facultyId===user.data.id
+    );
+
+
+    const display=
+    document.getElementById(
+        "facultyExamDisplay"
+    );
+
+
+    display.innerHTML=`
+
+    <div class="card">
+
+    <h2>Student Results</h2>
+
+    `;
+
+
+    if(myResults.length===0){
+
+        display.innerHTML+=
+        "<p>No student results available.</p>";
+
+    }else{
+
+        myResults.forEach(r=>{
+
+            display.innerHTML+=`
+
+            <div class="result-item">
+
+            <h3>
+            ${r.studentName}
+            </h3>
+
+            <p>
+            Student ID: ${r.studentId}
+            </p>
+
+            <p>
+            Examination: ${r.examName}
+            </p>
+
+            <p>
+            Subject: ${r.subject}
+            </p>
+
+            <p>
+            Marks:
+            <strong>
+            ${r.marks}/${r.totalMarks}
+            </strong>
+            </p>
+
+            <p>
+            Percentage:
+            ${r.percentage.toFixed(2)}%
+            </p>
+
+            <p>
+            Grade:
+            <strong>
+            ${r.grade}
+            </strong>
+            </p>
+
+            <p>
+            Correct: ${r.correct}
+            |
+            Wrong: ${r.wrong}
+            </p>
+
+            <p>
+            Date: ${r.date}
+            </p>
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+
+    display.innerHTML+="</div>";
+
+}
+
+
+/* =====================================================
+LOGOUT
+===================================================== */
+
+function logout(){
+
+    clearInterval(timerInterval);
+
+    localStorage.removeItem(
+        "currentUser"
+    );
+
+    showPage("homePage");
+
+}
+
+
+/* =====================================================
+INITIAL LOAD
+===================================================== */
+
+window.addEventListener(
+    "load",
+    function(){
+
+        loadFacultyList();
+
+    }
+);
+
+</script>
+
+</body>
+</html>
